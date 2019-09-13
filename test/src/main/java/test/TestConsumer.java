@@ -21,8 +21,6 @@ public class TestConsumer {
 		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
 		properties.put(ConsumerConfig.GROUP_ID_CONFIG, "1");
 		properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
-		properties.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
-		properties.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");
 		properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.IntegerDeserializer");
 		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer"); 
 	        
