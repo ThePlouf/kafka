@@ -1,0 +1,23 @@
+allprojects {
+    group = 'be.pdty.kafka'
+    version = '0.0.1-SNAPSHOT'
+}
+
+subprojects {
+    apply plugin: 'java'
+
+	sourceCompatibility = '1.8'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile 'org.springframework.boot:spring-boot-starter:2.1.8.RELEASE'
+        compile 'org.slf4j:slf4j-api:1.7.28'
+        compile 'org.apache.kafka:kafka-clients:2.0.1'
+        compile 'org.springframework.kafka:spring-kafka:2.2.8.RELEASE'
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.9.9.3'
+        testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.8.RELEASE'
+    }
+}

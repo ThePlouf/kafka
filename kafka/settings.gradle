@@ -1,0 +1,8 @@
+rootProject.name = 'kafka'
+include(':common')
+include(':client')
+include(':checker')
+include(':aml')
+include(':processor')
+include(':mailer')
+include(':auditor')
