@@ -1,3 +1,8 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.8.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+
 allprojects {
     group = 'be.pdty.kafka'
     version = '0.0.1-SNAPSHOT'
@@ -5,12 +10,13 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-
+	
 	sourceCompatibility = '1.8'
 
     repositories {
         mavenCentral()
     }
+
 
     dependencies {
         compile 'org.springframework.boot:spring-boot-starter:2.1.8.RELEASE'
