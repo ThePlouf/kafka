@@ -3,16 +3,16 @@ package be.pdty.kafka.reporter;
 import java.util.Properties;
 
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KafkaStreams.State;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.state.KeyValueBytesStoreSupplier;
 import org.apache.kafka.streams.state.KeyValueIterator;
-import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
+import org.apache.kafka.streams.state.Stores;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -34,6 +34,7 @@ public class ReporterApp {
 	
 	@Autowired
 	private KafkaStreams streams;
+	
 
 	private Properties getStreamsConfiguration() {
 		
@@ -44,11 +45,14 @@ public class ReporterApp {
 		return streamsConfiguration;
 	}	
 	
+	
 	@Bean
 	public KafkaStreams getStreams() {
 		StreamsBuilder builder = new StreamsBuilder();
 		
-		builder.globalTable("account-aggregated",Materialized.<String,Integer,KeyValueStore<Bytes,byte[]>>as("account-aggregated-store").withKeySerde(Serdes.String()).withValueSerde(Serdes.Integer()));
+		KeyValueBytesStoreSupplier storeSupplier = Stores.inMemoryKeyValueStore("account-aggregated-store");
+		
+		builder.globalTable("account-aggregated",Materialized.<String,Integer>as(storeSupplier).withKeySerde(Serdes.String()).withValueSerde(Serdes.Integer()));
 		
 		KafkaStreams streams = new KafkaStreams(builder.build(), getStreamsConfiguration());
 	    streams.cleanUp();
