@@ -2,6 +2,8 @@ package be.pdty.kafka.processor;
 
 import java.math.BigDecimal;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import be.pdty.kafka.common.AccountUpdate;
 import be.pdty.kafka.common.TransferRequest;
 import be.pdty.kafka.common.TransferRequestError;
+import be.pdty.kafka.processor.Processor.CreditPair;
 
 @SpringBootApplication
 public class ProcessorApp {
@@ -29,15 +32,20 @@ public class ProcessorApp {
 	@Value("${error-topic}")
 	private String errorTopic;
 	
+	@Autowired
+	private Processor processor;
+	
 	@KafkaListener(topics = "${source-topic}")
 	public void processMessage(ConsumerRecord<String,TransferRequest> record) {
 		try(Producer<String,Object> producer = kafkaTemplate.getProducerFactory().createProducer()) {
 			
 			try {
 				TransferRequest request=record.value();
-				//Note: there you would perform the actual book transfer in a transactional manner
-				BigDecimal issuerCredit=BigDecimal.ZERO;
-				BigDecimal beneficiaryCredit=BigDecimal.ZERO;
+				
+				CreditPair pair = processor.executeRequest(request);
+				
+				BigDecimal issuerCredit=pair.a;
+				BigDecimal beneficiaryCredit=pair.b;
 				
 				AccountUpdate issuerUpdate=new AccountUpdate(request.reference+"/I", request.issuer, request.beneficiary, request.reference, request.amount.negate(), issuerCredit);
 				AccountUpdate beneficiaryUpdate=new AccountUpdate(request.reference+"/B", request.beneficiary, request.issuer, request.reference, request.amount, beneficiaryCredit);
@@ -56,6 +64,11 @@ public class ProcessorApp {
 			
 		}
 
+	}
+	
+	@PostConstruct
+	public void test() {
+		processor.test();
 	}
 
 	public static void main(String[] args) {
