@@ -36,6 +36,10 @@ public class AuditorApp {
 		System.out.println("Request "+record.key()+" failed: "+record.value().message);
 	}
 	
+	@KafkaListener(topics = "account-aggregated",properties={"value.deserializer=org.apache.kafka.common.serialization.IntegerDeserializer"})
+	public void processAggregatedUpdate(ConsumerRecord<String,Integer> record) {
+		System.out.println("Aggregated "+record.key()+": "+record.value());
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(AuditorApp.class,args);
