@@ -2,8 +2,6 @@ package be.pdty.kafka.processor;
 
 import java.math.BigDecimal;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,12 @@ import be.pdty.kafka.processor.Processor.CreditPair;
 @SpringBootApplication
 public class ProcessorApp {
 	@Autowired
+	public ProcessorApp(KafkaTemplate<String,Object> kafkaTemplate,Processor processor) {
+		this.kafkaTemplate = kafkaTemplate;
+	}
+	
 	private KafkaTemplate<String,Object> kafkaTemplate;
+	private Processor processor;
 
 	@Value("${target-topic}")
 	private String targetTopic;
@@ -32,8 +35,6 @@ public class ProcessorApp {
 	@Value("${error-topic}")
 	private String errorTopic;
 	
-	@Autowired
-	private Processor processor;
 	
 	@KafkaListener(topics = "${source-topic}")
 	public void processMessage(ConsumerRecord<String,TransferRequest> record) {
@@ -66,12 +67,11 @@ public class ProcessorApp {
 
 	}
 	
-	@PostConstruct
-	public void test() {
-		processor.test();
+	private void test() {
+		//processor.test();
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProcessorApp.class,args);
+		SpringApplication.run(ProcessorApp.class,args).getBean(ProcessorApp.class).test();
 	}
 }

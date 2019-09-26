@@ -13,32 +13,32 @@ public class AuditorApp {
 
 	@KafkaListener(topics = "${request-topic}")
 	public void processRequest(ConsumerRecord<String,AccountUpdate> record) {
-		System.out.println("Request "+record.key()+" received and pending validation");
+		System.out.println(Thread.currentThread().getName()+" Request "+record.key()+" received and pending validation");
 	}
 
 	@KafkaListener(topics = "${after-check-topic}")
 	public void processAfterCheck(ConsumerRecord<String,AccountUpdate> record) {
-		System.out.println("Request "+record.key()+" validated and pending AML");
+		System.out.println(Thread.currentThread().getName()+" Request "+record.key()+" validated and pending AML");
 	}
 	
 	@KafkaListener(topics = "${after-aml-topic}")
 	public void processAfterAML(ConsumerRecord<String,AccountUpdate> record) {
-		System.out.println("Request "+record.key()+" passed AML and pending processing");
+		System.out.println(Thread.currentThread().getName()+" Request "+record.key()+" passed AML and pending processing");
 	}
 
 	@KafkaListener(topics = "${completed-topic}")
 	public void processCompleted(ConsumerRecord<String,AccountUpdate> record) {
-		System.out.println("Request "+record.key()+" completed");
+		System.out.println(Thread.currentThread().getName()+" Request "+record.key()+" completed");
 	}
 
 	@KafkaListener(topics = "${error-topic}")
 	public void processFailure(ConsumerRecord<String,TransferRequestError> record) {
-		System.out.println("Request "+record.key()+" failed: "+record.value().message);
+		System.out.println(Thread.currentThread().getName()+" Request "+record.key()+" failed: "+record.value().message);
 	}
 	
 	@KafkaListener(topics = "account-aggregated",properties={"value.deserializer=org.apache.kafka.common.serialization.IntegerDeserializer"})
 	public void processAggregatedUpdate(ConsumerRecord<String,Integer> record) {
-		System.out.println("Aggregated "+record.key()+": "+record.value());
+		System.out.println(Thread.currentThread().getName()+" Aggregated "+record.key()+": "+record.value());
 	}
 
 	public static void main(String[] args) {

@@ -25,6 +25,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 @SpringBootApplication
 @EnableScheduling
 public class ReporterApp {
+	@Autowired
+	public ReporterApp(KafkaStreams streams) {
+		this.streams = streams;
+	}
 
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
@@ -32,7 +36,6 @@ public class ReporterApp {
 	@Value("${spring.kafka.consumer.properties.spring.json.trusted.packages}")
 	private String trustedPackages;
 	
-	@Autowired
 	private KafkaStreams streams;
 	
 

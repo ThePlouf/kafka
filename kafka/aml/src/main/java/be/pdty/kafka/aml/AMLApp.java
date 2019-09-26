@@ -16,7 +16,12 @@ import be.pdty.kafka.common.TransferRequestError;
 
 @SpringBootApplication
 public class AMLApp {
+
 	@Autowired
+	public AMLApp(KafkaTemplate<String,Object> kafkaTemplate) {
+		this.kafkaTemplate = kafkaTemplate;
+	}
+	
 	private KafkaTemplate<String,Object> kafkaTemplate;
 
 	@Value("${target-topic}")

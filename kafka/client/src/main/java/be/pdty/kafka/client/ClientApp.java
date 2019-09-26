@@ -1,11 +1,7 @@
 package be.pdty.kafka.client;
 
 import java.math.BigDecimal;
-import java.security.SecureRandom;
-import java.util.Random;
 import java.util.UUID;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.kafka.clients.producer.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,29 +16,33 @@ import be.pdty.kafka.common.TransferRequest;
 @SpringBootApplication
 public class ClientApp {
 	@Autowired
+	public ClientApp(KafkaTemplate<String,TransferRequest> kafkaTemplate) {
+		this.kafkaTemplate = kafkaTemplate;
+	}
+	
 	private KafkaTemplate<String,TransferRequest> kafkaTemplate;
 	
 	@Value("${target-topic}")
 	private String requestTopic;
 
-	@PostConstruct
-	private void issueTransfer() throws Exception {
+	private void issueTransfer() {
 		Account mine=new Account("123456");
 		Account theirs=new Account("654321");
 		
-		Random random=new SecureRandom();
+		//Random random=new SecureRandom();
 		
 		
 		try(Producer<String,TransferRequest> producer = kafkaTemplate.getProducerFactory().createProducer()) {
-			for(int i=0;i<100_000;i++) {
+			for(int i=0;i<1;i++) {
 				String reference=UUID.randomUUID().toString();
-				TransferRequest tr=new TransferRequest(reference,random.nextBoolean()?mine:theirs,random.nextBoolean()?theirs:mine,BigDecimal.valueOf(random.nextInt(1000)-10));
+				//TransferRequest tr=new TransferRequest(reference,random.nextBoolean()?mine:theirs,random.nextBoolean()?theirs:mine,BigDecimal.valueOf(random.nextInt(1000)-10));
+				TransferRequest tr=new TransferRequest(reference,mine,theirs,BigDecimal.valueOf(17));
 				kafkaTemplate.send(requestTopic,reference,tr);
 			}
 		}
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(ClientApp.class,args);
+		SpringApplication.run(ClientApp.class,args).getBean(ClientApp.class).issueTransfer();
 	}
 }

@@ -18,6 +18,10 @@ import be.pdty.kafka.common.TransferRequestError;
 @SpringBootApplication
 public class CheckerApp {
 	@Autowired
+	public CheckerApp(KafkaTemplate<String,Object> kafkaTemplate) {
+		this.kafkaTemplate = kafkaTemplate;
+	}
+	
 	private KafkaTemplate<String,Object> kafkaTemplate;
 
 	@Value("${target-topic}")

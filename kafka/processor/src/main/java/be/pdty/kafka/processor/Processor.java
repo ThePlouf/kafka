@@ -12,6 +12,7 @@ import be.pdty.kafka.common.TransferRequest;
 
 @Service
 public class Processor {
+	
 	public class CreditPair {
 		public CreditPair(BigDecimal a,BigDecimal b) {
 			this.a=a;
@@ -23,6 +24,10 @@ public class Processor {
 	}
 
 	@Autowired
+	public Processor(VostroRepository vostros) {
+		this.vostros = vostros;
+	}
+
 	private VostroRepository vostros;
 	
 	@Transactional
