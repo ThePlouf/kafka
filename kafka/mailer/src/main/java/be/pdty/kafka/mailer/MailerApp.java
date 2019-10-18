@@ -1,15 +1,14 @@
 package be.pdty.kafka.mailer;
 
-import java.math.BigDecimal;
-
+import be.pdty.kafka.common.AccountUpdate;
+import be.pdty.kafka.common.TransferRequest;
+import be.pdty.kafka.common.TransferRequestError;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.KafkaListener;
 
-import be.pdty.kafka.common.AccountUpdate;
-import be.pdty.kafka.common.TransferRequest;
-import be.pdty.kafka.common.TransferRequestError;
+import java.math.BigDecimal;
 
 @SpringBootApplication
 public class MailerApp {

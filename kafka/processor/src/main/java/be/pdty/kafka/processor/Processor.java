@@ -1,19 +1,17 @@
 package be.pdty.kafka.processor;
 
-import java.math.BigDecimal;
-import java.util.Optional;
-
-import javax.transaction.Transactional;
-
+import be.pdty.kafka.common.TransferRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import be.pdty.kafka.common.TransferRequest;
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class Processor {
 	
-	public class CreditPair {
+	public static class CreditPair {
 		public CreditPair(BigDecimal a,BigDecimal b) {
 			this.a=a;
 			this.b=b;
@@ -28,7 +26,7 @@ public class Processor {
 		this.vostros = vostros;
 	}
 
-	private VostroRepository vostros;
+	private final VostroRepository vostros;
 	
 	@Transactional
 	public CreditPair executeRequest(TransferRequest request)  throws Exception {

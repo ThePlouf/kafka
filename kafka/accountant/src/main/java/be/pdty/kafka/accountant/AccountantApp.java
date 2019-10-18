@@ -1,9 +1,6 @@
 package be.pdty.kafka.accountant;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
+import be.pdty.kafka.common.AccountUpdate;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
@@ -11,20 +8,16 @@ import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.Grouped;
-import org.apache.kafka.streams.kstream.KGroupedStream;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.KTable;
-import org.apache.kafka.streams.kstream.Materialized;
-import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import be.pdty.kafka.common.AccountUpdate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 
 @SpringBootApplication
@@ -55,11 +48,11 @@ public class AccountantApp {
 	private void run() {
 		Map<String, Object> serdeProps = new HashMap<>();
 		   
-		Serializer<AccountUpdate> accountUpdateSerializer = new JsonSerializer<AccountUpdate>();
+		Serializer<AccountUpdate> accountUpdateSerializer = new JsonSerializer<>();
 		serdeProps.put("JsonPOJOClass", AccountUpdate.class);
 		accountUpdateSerializer.configure(serdeProps, false);
 		
-		Deserializer<AccountUpdate> accountUpdateDeserializer = new JsonDeserializer<AccountUpdate>();
+		Deserializer<AccountUpdate> accountUpdateDeserializer = new JsonDeserializer<>();
 		serdeProps.put("JsonPOJOClass", AccountUpdate.class);
 		serdeProps.put(JsonDeserializer.TRUSTED_PACKAGES, trustedPackages);
 		accountUpdateDeserializer.configure(serdeProps, false);

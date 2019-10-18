@@ -1,7 +1,8 @@
 package be.pdty.kafka.checker;
 
-import java.math.BigDecimal;
-
+import be.pdty.kafka.common.Account;
+import be.pdty.kafka.common.TransferRequest;
+import be.pdty.kafka.common.TransferRequestError;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import be.pdty.kafka.common.Account;
-import be.pdty.kafka.common.TransferRequest;
-import be.pdty.kafka.common.TransferRequestError;
+import java.math.BigDecimal;
 
 @SpringBootApplication
 public class CheckerApp {
@@ -22,7 +21,7 @@ public class CheckerApp {
 		this.kafkaTemplate = kafkaTemplate;
 	}
 	
-	private KafkaTemplate<String,Object> kafkaTemplate;
+	private final KafkaTemplate<String,Object> kafkaTemplate;
 
 	@Value("${target-topic}")
 	private String targetTopic;

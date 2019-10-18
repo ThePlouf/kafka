@@ -1,9 +1,8 @@
 package be.pdty.kafka.processor;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 
 @Entity
 public class Vostro {

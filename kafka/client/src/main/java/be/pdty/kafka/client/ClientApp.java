@@ -1,8 +1,7 @@
 package be.pdty.kafka.client;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
+import be.pdty.kafka.common.Account;
+import be.pdty.kafka.common.TransferRequest;
 import org.apache.kafka.clients.producer.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,8 +9,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import be.pdty.kafka.common.Account;
-import be.pdty.kafka.common.TransferRequest;
+import java.math.BigDecimal;
+import java.util.UUID;
 
 @SpringBootApplication
 public class ClientApp {
@@ -20,7 +19,7 @@ public class ClientApp {
 		this.kafkaTemplate = kafkaTemplate;
 	}
 	
-	private KafkaTemplate<String,TransferRequest> kafkaTemplate;
+	private final KafkaTemplate<String,TransferRequest> kafkaTemplate;
 	
 	@Value("${target-topic}")
 	private String requestTopic;

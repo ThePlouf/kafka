@@ -1,7 +1,9 @@
 package be.pdty.kafka.processor;
 
-import java.math.BigDecimal;
-
+import be.pdty.kafka.common.AccountUpdate;
+import be.pdty.kafka.common.TransferRequest;
+import be.pdty.kafka.common.TransferRequestError;
+import be.pdty.kafka.processor.Processor.CreditPair;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,20 +13,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import be.pdty.kafka.common.AccountUpdate;
-import be.pdty.kafka.common.TransferRequest;
-import be.pdty.kafka.common.TransferRequestError;
-import be.pdty.kafka.processor.Processor.CreditPair;
+import java.math.BigDecimal;
 
 @SpringBootApplication
 public class ProcessorApp {
 	@Autowired
 	public ProcessorApp(KafkaTemplate<String,Object> kafkaTemplate,Processor processor) {
 		this.kafkaTemplate = kafkaTemplate;
+		this.processor = processor;
 	}
 	
-	private KafkaTemplate<String,Object> kafkaTemplate;
-	private Processor processor;
+	private final KafkaTemplate<String,Object> kafkaTemplate;
+	private final Processor processor;
 
 	@Value("${target-topic}")
 	private String targetTopic;
